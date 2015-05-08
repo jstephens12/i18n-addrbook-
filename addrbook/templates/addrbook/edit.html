@@ -1,0 +1,46 @@
+{% extends "addrbook/search.html" %}
+
+{% load i18n %}
+
+{% block content %}
+    {% for error in form.non_field_errors %}
+        <p style="color: red">
+            {{ error }}
+        </p>
+    {% endfor %}
+
+    <form method="post" action="{% url 'edit' entry.id %}">
+        <table>
+            {% for field in form.visible_fields %}
+                <tr>
+                    <td>{{field.label_tag}}</td>
+                    <td>{{field}}</td>
+                    <td>{{field.errors}}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>{% trans 'Created' %}:</td>
+                <td>
+                    {{entry.creation_time}}
+                    (by {{entry.created_by.first_name}} {{entry.created_by.last_name}})
+                </td>
+            </tr>
+            <tr>
+                <td>{% trans 'Last Updated' %}:</td>
+                <td>{{entry.update_time}} (by user {{entry.updated_by}})</td>
+            </tr>
+        </table>
+        {% for field in form.hidden_fields %}
+            {{field}} {{field.errors}}
+        {% endfor %}
+        {% csrf_token %}
+        <input type="submit" value="{% trans 'Update' %}">
+    </form>
+
+    <form action="/addrbook/delete/{{entry.id}}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="{% trans 'Delete' %}">
+    </form>
+
+    <script> window.onload = document.getElementById("id_last_name").focus() </script>
+{% endblock %}

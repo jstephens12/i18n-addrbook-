@@ -1,0 +1,15 @@
+{% extends "addrbook/base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+    <p>Register for the address book:</p>
+
+    <form method="post" action="{% url 'register' %}">
+        <table>
+            {{form}}
+        </table>
+        {% csrf_token %}
+        <input type="submit" value="{% trans 'Register' %}" />
+    </form>
+{% endblock %}
